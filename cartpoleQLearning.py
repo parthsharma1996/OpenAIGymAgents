@@ -26,15 +26,12 @@ def selectAction(w,obs):
 
 
 for trial_num in range(0,max_trials):
-
-
+    
+    obs = env.reset()
+    
     for step_num in range(0,max_steps):
 
         obs,r,done,info = env.step(action)
-
-        
-        
-
         prev_obs = obs
         w = updateWeights(q_target,q_present)
         a = selectAction(obs)

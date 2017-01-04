@@ -4,7 +4,7 @@ import random
 
 obs_dim = 500 
 action_dim = 6
-max_episodes = 300000
+max_episodes = 30000
 max_steps = 1000000
 learning_rate = 0.001
 eps_start  = 1 
@@ -13,10 +13,10 @@ eps_step = (eps_start -eps_end)/max_episodes
 eps_threshold = 9
 gamma = 0.97 
 solv_req = 9.7
-record = True
-env = gym.make('Taxi-v1')
+record = False
+env = gym.make('Roulette-v0')
 if record:
-    env.monitor.start('/tmp/Taxi-experiment-1',force=True)
+    env.monitor.start('/tmp/Roulette-experiment-1',force=True)
 
 q = np.zeros((obs_dim,action_dim))
 r_list = []
@@ -69,5 +69,5 @@ print("Average reward in the last 100 episodes was ",sum(r_list[-100:])/100)
 print(q)
 if record:
     env.monitor.close()
-    gym.upload('/tmp/Taxi-experiment-1', api_key='sk_FjvBIfXASuuFdqgLn83bHw')
+    gym.upload('/tmp/Roulette-experiment-1', api_key='sk_FjvBIfXASuuFdqgLn83bHw')
 
