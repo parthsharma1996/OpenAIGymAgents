@@ -2,31 +2,30 @@ import gym
 import numpy as np
 import random
 
-obs_dim = 8*8 
-action_dim = 4
-max_episodes = 3000000
+obs_dim = [32,11,2] 
+action_dim =2 
+max_episodes = 300000
 max_steps = 1000000
 learning_rate = 0.001
 eps_start  = 1 
-eps_end = 0.0001
+eps_end = 0.001
 eps_step = (eps_start -eps_end)/max_episodes
-eps_threshold = 0.5
+eps_threshold = 9
 gamma = 0.97 
-solv_req = 0.99
+solv_req = 9.7
 record = True
-
-env = gym.make('FrozenLake8x8-v0')
+env = gym.make('Blackjack-v0')
 if record:
-    env.monitor.start('/tmp/frozenLake-experiment-1',force=True)
-
-q = np.zeros((obs_dim,action_dim))
+    env.monitor.start('/tmp/Blackjack-experiment-1',force=True)
+obs_dim.append(action_dim)
+q = np.zeros(tuple(obs_dim)
 r_list = []
 
 def selectAction(s,epsilon):
     #print("e",epsilon)
     #following an epsilon-greedy policy
     if epsilon >= random.random():
-        a = random.randint(0,3)
+        a = random.randint(0,action_dim-1)
     else:
         a = np.argmax(q[s,:])
    # print("action chosen was",a)
@@ -42,25 +41,24 @@ for num_episode in range(0,max_episodes):
 
     obs = env.reset()
     prev_obs = obs
+    r_ep = 0 #Resetting the r_ep value i.e.reward in one episode 
     #print(epsilon)
     for num_steps in range(0,max_steps):
         action  = selectAction(prev_obs,epsilon)
         obs, r, done, info  = env.step(action)
+        r_ep  = r_ep + r
         updateQValues(prev_obs, obs,r)
-        if r==1 :
-            counter +=1
-            #print("kuch to mila", num_episode,num_steps,counter)
         if done:
             #print("Reward was " ,r)
             #print(q)
-            r_list.append(r)
+            r_list.append(r_ep)
             break;
         prev_obs = obs
-    if num_episode%100==0:
+    if num_episode%1000==0:
         print("Average reward in the last 100 episodes was ",sum(r_list[-100:])/100,"\n",epsilon )
     
     if sum(r_list[-100:])/100 >=eps_threshold:
-        epsilon = 0.0001
+        epsilon = 0.00001
     else:
         epsilon = epsilon - eps_step
     if sum(r_list[-100:])/100 >=solv_req:
@@ -71,5 +69,5 @@ print("Average reward in the last 100 episodes was ",sum(r_list[-100:])/100)
 print(q)
 if record:
     env.monitor.close()
-    gym.upload('/tmp/frozenLake-experiment-1', api_key='sk_FjvBIfXASuuFdqgLn83bHw')
+    gym.upload('/tmp/Blackjack-experiment-1', api_key='sk_FjvBIfXASuuFdqgLn83bHw')
 

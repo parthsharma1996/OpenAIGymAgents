@@ -2,8 +2,8 @@ import gym
 import numpy as np
 import random
 
-obs_dim = 500 
-action_dim = 6
+obs_dim = 1 
+action_dim = 38
 max_episodes = 30000
 max_steps = 1000000
 learning_rate = 0.001
@@ -12,7 +12,7 @@ eps_end = 0.001
 eps_step = (eps_start -eps_end)/max_episodes
 eps_threshold = 9
 gamma = 0.97 
-solv_req = 9.7
+solv_req = 100000070 #A really big number
 record = False
 env = gym.make('Roulette-v0')
 if record:
@@ -54,7 +54,7 @@ for num_episode in range(0,max_episodes):
             r_list.append(r_ep)
             break;
         prev_obs = obs
-    if num_episode%1000==0:
+    if num_episode%10==0:
         print("Average reward in the last 100 episodes was ",sum(r_list[-100:])/100,"\n",epsilon )
     
     if sum(r_list[-100:])/100 >=eps_threshold:
