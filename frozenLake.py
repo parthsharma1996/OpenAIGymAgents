@@ -71,5 +71,5 @@ print("Average reward in the last 100 episodes was ",sum(r_list[-100:])/100)
 print(q)
 if record:
     env.monitor.close()
-    gym.upload('/tmp/frozenLake-experiment-1', api_key='sk_FjvBIfXASuuFdqgLn83bHw')
+    gym.upload('/tmp/frozenLake-experiment-1') 
 

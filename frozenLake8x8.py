@@ -10,14 +10,14 @@ learning_rate = 0.001
 eps_start  = 1 
 eps_end = 0.0001
 eps_step = (eps_start -eps_end)/max_episodes
-eps_threshold = 0.5
-gamma = 0.97 
+eps_threshold = 0.2
+gamma = 0.95 
 solv_req = 0.99
-record = True
+record = False
 
 env = gym.make('FrozenLake8x8-v0')
 if record:
-    env.monitor.start('/tmp/frozenLake-experiment-1',force=True)
+    env.monitor.start('/tmp/frozenLake-experiment-1',force=False)
 
 q = np.zeros((obs_dim,action_dim))
 r_list = []
@@ -56,11 +56,11 @@ for num_episode in range(0,max_episodes):
             r_list.append(r)
             break;
         prev_obs = obs
-    if num_episode%100==0:
+    if num_episode%10000==0:
         print("Average reward in the last 100 episodes was ",sum(r_list[-100:])/100,"\n",epsilon )
     
     if sum(r_list[-100:])/100 >=eps_threshold:
-        epsilon = 0.0001
+        epsilon = eps_end
     else:
         epsilon = epsilon - eps_step
     if sum(r_list[-100:])/100 >=solv_req:
@@ -71,5 +71,5 @@ print("Average reward in the last 100 episodes was ",sum(r_list[-100:])/100)
 print(q)
 if record:
     env.monitor.close()
-    gym.upload('/tmp/frozenLake-experiment-1', api_key='sk_FjvBIfXASuuFdqgLn83bHw')
+    gym.upload('/tmp/frozenLake-experiment-1')
 
